@@ -17,6 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
+
 def check_password():
     def password_entered():
         if st.session_state["password"] == st.secrets["password"]:
@@ -38,9 +39,9 @@ def check_password():
         st.error("Password errata")
     return False
 
+
 if not check_password():
     st.stop()
-
 st.markdown("""
     <style>
     [data-testid="stSidebar"] {
@@ -71,6 +72,8 @@ st.markdown("""
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "contabilita_soci.db")
 SOCIO_1, SOCIO_2 = "BAGLI", "TROPEA"
+
+
 def trova_logo():
     estensioni_valide = (".png", ".jpg", ".jpeg", ".webp", ".bmp")
     if os.path.exists(BASE_DIR):
@@ -78,8 +81,6 @@ def trova_logo():
             if "logo" in file.lower() and file.lower().endswith(estensioni_valide):
                 return os.path.join(BASE_DIR, file)
     return None
-
-
 def inizializza_db():
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
@@ -444,7 +445,8 @@ def genera_pdf_bytes(row_dict, percorso_logo):
     story.append(t_firme)
     doc.build(story)
     buffer_pdf.seek(0)
-  inizializza_db()
+    return buffer_pdf.getvalue()
+inizializza_db()
 
 if "nuovo_desc" not in st.session_state:
     st.session_state.nuovo_desc = ""
@@ -531,7 +533,6 @@ with col_titolo:
     st.caption("Sistema Gestionale Preventivi Soci — Bagli & Tropea")
 
 st.divider()
-
 if menu == "Registro Preventivi":
     st.header("Registro Preventivi Soci")
 
@@ -584,7 +585,7 @@ if menu == "Registro Preventivi":
                 mime="application/pdf",
                 type="primary"
             )
-  return buffer_pdf.getvalue()
+
 elif menu == "Nuovo Preventivo":
     st.header("Compilazione Nuovo Preventivo")
 
